@@ -45,6 +45,11 @@ screen_name=[Your account]
 not_desired_words=[Comma separated word list]
 exception_words=[Comma separated word list]
 ```
+# Run the Script
+
+```
+$ python .\block_users.py
+```
 
 # Uninstall Packages
 ```
