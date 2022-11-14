@@ -45,3 +45,12 @@ screen_name=[Your account]
 not_desired_words=[Comma separated word list]
 exception_words=[Comma separated word list]
 ```
+
+# Uninstall Packages
+```
+pip uninstall -r requirements.txt
+```
+or
+```
+pip3 uninstall -r requirements.txt
+```
