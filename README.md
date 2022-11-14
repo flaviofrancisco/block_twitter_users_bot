@@ -11,7 +11,18 @@ If you think that it is Okay, you can uncomment the line 31 of the file block_us
 # Setting up your environment
 After cloning this repository you should create a virtual environment and activate it.
 
+## Create a virtual environment
+
+Create a virtual environment and activate it.
+
+```
+$ python -m venv venv
+$ .\venv\Scripts\activate
+```
+
 # Install Packages
+
+Install the dependencies with the environment activated to avoid install it globally in your machine.
 
 ```
 $ pip install -r requirements.txt
