@@ -1,7 +1,5 @@
 python-dotenv==0.21.0
 autopep8==1.7.0
-beautifulsoup4==4.10.0
-bs4==0.0.1
 certifi==2021.10.8
 charset-normalizer==2.0.11
 cloudscraper==1.2.64
@@ -9,7 +7,6 @@ emoji==2.1.0
 idna==3.3
 oauthlib==3.2.0
 pycodestyle==2.9.1
-pyodbc==4.0.34
 pyparsing==3.0.9
 pytz==2022.2.1
 requests==2.27.1
