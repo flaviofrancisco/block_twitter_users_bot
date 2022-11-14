@@ -1,5 +1,12 @@
 # Welcome to the Block Twitter Users Bot
-The goal of this script is to block Twitter users based on words found on the account's description.
+The goal of this script is to block Twitter users based on words found in the account's description.
+
+**It is your own responsability to run this script against your account. This code was not accurately tested.**
+
+# Test before deploy ...
+A recomendation is to play with the words in the settings: not_desired_words and exception_words **commenting the line 31 of the file: block_users.py**.
+With that you generate two files: one with the blocked accounts and another one with no blocked accounts.
+If you think that it is Okay, you can uncomment the line 31 of the file block_users.py.
 
 # Setting up your environment
 After cloning this repository you should create a virtual environment and activate it.
@@ -16,19 +23,14 @@ $ pip3 install -r requirements.txt
 ```
 
 ## .env file
-You should also create a .env file with the following key/ values based on your needs.
+You should also create a .env file with the following keys/ values based on your needs. Replace the values between squared brackets accordingly.
 
 ```
-consumer_key=
-consumer_secret=
-access_token_key=
-access_token_secret=
-screen_name=
-not_desired_words=
-exception_words=
+consumer_key=[Get it from the Twitter Developer Console]
+consumer_secret=[Get it from the Twitter Developer Console]
+access_token_key=[Get it from the Twitter Developer Console]
+access_token_secret=[Get it from the Twitter Developer Console]
+screen_name=[Your account]
+not_desired_words=[Comma separated word list]
+exception_words=[Comma separated word list]
 ```
-
-
-
-
-
