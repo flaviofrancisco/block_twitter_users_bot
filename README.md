@@ -19,14 +19,16 @@ $ pip3 install -r requirements.txt
 You should also create a .env file with the following key/ values based on your needs.
 
 ```
-consumer_key=
-consumer_secret=
-access_token_key=
-access_token_secret=
-screen_name=
-not_desired_words=
-exception_words=
+consumer_key=[Get it from the Twitter Developer Console]
+consumer_secret=[Get it from the Twitter Developer Console]
+access_token_key=[Get it from the Twitter Developer Console]
+access_token_secret=[Get it from the Twitter Developer Console]
+screen_name=[Your account]
+not_desired_words=[Comma separated word list]
+exception_words=[Comma separated word list]
 ```
+
+
 
 
 
