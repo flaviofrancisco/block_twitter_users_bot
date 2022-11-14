@@ -1,6 +1,13 @@
 # Welcome to the Block Twitter Users Bot
 The goal of this script is to block Twitter users based on words found in the account's description.
 
+**It is your own responsability to run this script against your account. This code was not accurately tested.**
+
+# Test before deploy ...
+A recomendation is to play with the words in the settings: not_desired_words and exception_words **commenting the line 31 of the file: block_users.py**.
+With that you generate two files: one with the blocked accounts and another one with no blocked accounts.
+If you think that it is Okay, you can uncomment the line 31 of the file block_users.py.
+
 # Setting up your environment
 After cloning this repository you should create a virtual environment and activate it.
 
