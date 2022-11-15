@@ -74,7 +74,7 @@ def execute_block(follower):
         follower_str = f'{follower.id_str},{follower.name},@{follower.screen_name},{follower.created_at.strftime("%d-%m-%Y")},{follower.followers_count}{follows}'
 
         if (block and not not_block):
-            #__api.create_block(user_id=follower.id_str)
+            __api.create_block(user_id=follower.id_str)
             write_file(file_name=BLOCKED_FILE_NAME, message=f'{follower_str}')
         else:
             write_file(file_name=NOT_BLOCKED_FILE_NAME, message=f'{follower_str}')
