@@ -5,7 +5,7 @@ The goal of this script is to block Twitter users based on words found in the ac
 
 **I cannot guarantee that it will work as you expect.**
 
-# How to create a bot using TweePy
+# How to create a bot with Python using Tweepy
 
 [Como criar um bot no Twitter](https://www.youtube.com/watch?v=RijhM5PFyOA)
 
