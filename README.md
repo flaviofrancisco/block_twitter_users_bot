@@ -1,9 +1,17 @@
+# Welcome to the Block Twitter Users Bot
+The goal of this script is to block Twitter users based on words found in the account's description and based on account that your followers follow.
+
 **IT IS YOUR RESPONSABILITY TO RUN THIS SCRIPT AGAINST YOUR ACCOUNT. THIS CODE WAS NOT ACCURATELY TESTED**
 
 **I cannot guarantee that it will work as you expect.**
 
-# Welcome to the Block Twitter Users Bot
-The goal of this script is to block Twitter users based on words found in the account's description and based on account that your followers follow.
+# How to create a bot using TweePy
+
+[How to Create a Twitter Bot [Tweepy with Python]](https://www.youtube.com/watch?v=w_e1ZhwCBgc)
+
+[Create The Ultimate Twitter Bot With Python In 30 Minutes](https://www.youtube.com/watch?v=ewq-91-e2fw)
+
+[Como criar um bot no Twitter](https://www.youtube.com/watch?v=RijhM5PFyOA)
 
 # Test before deploy ...
 A recomendation is to play with the words in the settings: not_desired_words and exception_words **commenting the line 77 of the file: block_users.py**.
