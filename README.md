@@ -79,3 +79,6 @@ or
 ```
 pip3 uninstall -r requirements.txt
 ```
+
+#Notes
+The use of the function: **get_friendship** my impact in your Tweeter API rate limit. If you want you can either remove it or change the function in a way that exist if at least one result is true in order to compare will all values.
