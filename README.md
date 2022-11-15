@@ -46,6 +46,11 @@ not_desired_words=[Comma separated word list]
 exception_words=[Comma separated word list]
 restricted_accounts=[Comma separated account names of people you don't want your followers following.]
 ```
+# Run the Script
+
+```
+$ python .\block_users.py
+```
 
 ## How to set up
 Play with the combination of the following env variables: **exception_words**, **not_desired_words** and **restricted_accounts**.
