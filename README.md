@@ -1,5 +1,8 @@
 # Welcome to the Block Twitter Users Bot
 The goal of this script is to block Twitter users based on words found in the account's description and based on account that your followers follow.
+Due to rate limits the program stops for 15 minutes each time that either an Rate limit exception or Too Many Request exception is thrown.
+
+If you want to not check your followers friendship just comment the line: **follows = self.get_friendship(follower)** and check only the follower description. This will help on less access to Twitter API.
 
 **IT IS YOUR RESPONSABILITY TO RUN THIS SCRIPT AGAINST YOUR ACCOUNT. THIS CODE WAS NOT ACCURATELY TESTED**
 
