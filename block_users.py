@@ -53,7 +53,7 @@ def execute_block(follower):
     follower_str = f'{follower.id_str},{follower.name},@{follower.screen_name},{follower.created_at.strftime("%d-%m-%Y")},{follower.followers_count}{follows}'
 
     if (block and not not_block):
-        # __api.create_block(user_id=follower.id_str) ---> UNCOMMENT IF YOU WANT TO BLOCK!!!
+        __api.create_block(user_id=follower.id_str)
         with open('blocked.csv', 'a', encoding='utf-8') as f:
             print(f'BLOCKED --> {follower_str}')
             f.write(follower_str + '\n')
