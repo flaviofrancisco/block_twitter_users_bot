@@ -61,7 +61,7 @@ class BlockManager:
         self.__timer(60 * 15)                          
 
     def block_followers(self):    
-        for follower in self.__limit_handled(tweepy.Cursor(self.__api.get_followers, screen_name=self.__settings.my_screen_name).items()):        
+        for follower in self.__limit_handled(tweepy.Cursor(self.__api.get_followers, screen_name=self.__settings.my_screen_name, count=200).items()):        
             self.execute_block(follower) 
 
     def __limit_handled(self, cursor):
