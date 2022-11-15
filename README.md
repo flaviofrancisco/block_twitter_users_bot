@@ -1,5 +1,7 @@
 **IT IS YOUR RESPONSABILITY TO RUN THIS SCRIPT AGAINST YOUR ACCOUNT. THIS CODE WAS NOT ACCURATELY TESTED**
 
+**I cannot guarantee that it will work as you expect.**
+
 # Welcome to the Block Twitter Users Bot
 The goal of this script is to block Twitter users based on words found in the account's description and based on account that your followers follow.
 
