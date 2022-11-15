@@ -9,10 +9,12 @@ import time
 class BlockManager:
 
     def __init__(self):
-        auth = tweepy.OAuthHandler(consumer_key=os.getenv('consumer_key'), consumer_secret=os.getenv('consumer_secret'))
-        auth.set_access_token(key=os.getenv('access_token_key'), secret=os.getenv('access_token_secret'))
-        self.__api = tweepy.API(auth, wait_on_rate_limit=False)
+        
         self.__settings = Settings()
+
+        auth = tweepy.OAuthHandler(consumer_key=self.__settings.consumer_key, consumer_secret=self.__settings.consumer_secret)
+        auth.set_access_token(key=self.__settings.access_token_key, secret=self.__settings.access_token_secret)
+        self.__api = tweepy.API(auth, wait_on_rate_limit=False)        
 
     def __already_in_file(self, screen_name, file_name):
 
