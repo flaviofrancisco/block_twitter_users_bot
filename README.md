@@ -56,6 +56,21 @@ $ python .\block_users.py
 ## How to set up
 Play with the combination of the following env variables: **exception_words**, **not_desired_words** and **restricted_accounts**.
 
+If you want to block followers with the following words: war,crime,virus in their description:
+```
+not_desired_words=war,crime,virus
+```
+
+But don't want to block if they have the words: united nations
+```
+exception_words=united nations
+```
+
+Also, block if they follow these accounts: @xxx, @abc1234, @ert23455 (don't use the symbol at).
+```
+restricted_accounts=xxx,abc1234,ert23455
+```
+
 # Uninstall Packages
 ```
 pip uninstall -r requirements.txt
