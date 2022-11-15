@@ -1,7 +1,17 @@
 # Welcome to the Block Twitter Users Bot
-The goal of this script is to block Twitter users based on words found in the account's description.
+The goal of this script is to block Twitter users based on words found in the account's description and based on account that your followers follow.
 
-**It is your own responsability to run this script against your account. This code was not accurately tested.**
+**IT IS YOUR RESPONSABILITY TO RUN THIS SCRIPT AGAINST YOUR ACCOUNT. THIS CODE WAS NOT ACCURATELY TESTED**
+
+**I cannot guarantee that it will work as you expect.**
+
+# How to create a bot using TweePy
+
+[How to Create a Twitter Bot [Tweepy with Python]](https://www.youtube.com/watch?v=w_e1ZhwCBgc)
+
+[Create The Ultimate Twitter Bot With Python In 30 Minutes](https://www.youtube.com/watch?v=ewq-91-e2fw)
+
+[Como criar um bot no Twitter](https://www.youtube.com/watch?v=RijhM5PFyOA)
 
 # Test before deploy ...
 A recomendation is to play with the words in the settings: not_desired_words and exception_words **commenting the line 77 of the file: block_users.py**.
@@ -21,7 +31,18 @@ $ python -m venv venv
 $ .\venv\Scripts\activate
 ```
 
+## Create a virtual environment
+
+Create a virtual environment and activate it.
+
+```
+$ python -m venv venv
+$ .\venv\Scripts\activate
+```
+
 # Install Packages
+
+Install the dependencies with the environment activated to avoid install it globally in your machine.
 
 Install the dependencies with the environment activated to avoid install it globally in your machine.
 
@@ -35,7 +56,19 @@ $ pip3 install -r requirements.txt
 ```
 
 ## .env file
-You should also create a .env file with the following keys/ values based on your needs. Replace the values between squared brackets accordingly.
+You should also create a .env file with the following keyss/ values based on your needs. Replace the values between squared brackets accordingly.
+
+```
+consumer_key=[Get it from the Twitter Developer Console]
+consumer_secret=[Get it from the Twitter Developer Console]
+access_token_key=[Get it from the Twitter Developer Console]
+access_token_secret=[Get it from the Twitter Developer Console]
+screen_name=[Your account]
+not_desired_words=[Comma separated word list]
+exception_words=[Comma separated word list]
+restricted_accounts=[Comma separated account names of people you don't want your followers following.]
+```
+# Run the Script Replace the values between squared brackets accordingly.
 
 ```
 consumer_key=[Get it from the Twitter Developer Console]
@@ -70,6 +103,10 @@ Also, block if they follow these accounts: @xxx, @abc1234, @ert23455 (don't use 
 ```
 restricted_accounts=xxx,abc1234,ert23455
 ```
+Also, block if they follow these accounts: @xxx, @abc1234, @ert23455 (don't use the symbol at).
+```
+restricted_accounts=xxx,abc1234,ert23455
+```
 
 # Uninstall Packages
 ```
@@ -79,7 +116,16 @@ or
 ```
 pip3 uninstall -r requirements.txt
 ```
+# Uninstall Packages
+```
+pip uninstall -r requirements.txt
+```
+or
+```
+pip3 uninstall -r requirements.txt
+```
 
+# Notes
 # Notes
 
 The use of the function: **get_friendship** my impact in your Tweeter API rate limit. If you want you can either remove it or change the function in a way that exist if at least one result is true in order to compare will all values.
