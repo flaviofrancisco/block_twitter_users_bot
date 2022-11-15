@@ -1,23 +1,41 @@
 import os
+import os.path
 import tweepy
 import time
 from dotenv import load_dotenv, find_dotenv
+import csv
+
+BLOCKED_FILE_NAME = 'blocked.csv'
+NOT_BLOCKED_FILE_NAME = 'not_blocked.csv'
+SCREEN_NAME = 2
 
 __api = None
 
+def already_in_file(screen_name, file_name):
+
+    if not os.path.isfile(file_name):
+        return False
+
+    with open(file_name, encoding='utf-8') as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter=',')
+        for row in csv_reader:
+            if screen_name in row[SCREEN_NAME]:
+                return True
+
+    return False
 
 def get_api():
     auth = tweepy.OAuthHandler(consumer_key=os.getenv(
         'consumer_key'), consumer_secret=os.getenv('consumer_secret'))
     auth.set_access_token(key=os.getenv('access_token_key'),
                           secret=os.getenv('access_token_secret'))
-    api = tweepy.API(auth, wait_on_rate_limit=True)
+    api = tweepy.API(auth, wait_on_rate_limit=False)
     return api
 
 
 def block_followers():    
-    for follower in limit_handled(tweepy.Cursor(__api.get_followers, screen_name=os.getenv('screen_name')).items()):
-        execute_block(follower)
+    for follower in limit_handled(tweepy.Cursor(__api.get_followers, screen_name=os.getenv('screen_name'), count=10).items()):        
+        execute_block(follower)                    
 
 
 def get_friendship(follower):
@@ -29,48 +47,60 @@ def get_friendship(follower):
     if (accounts is None):
         return result
 
-    for account in accounts:
+    for account in accounts:        
         friendship = __api.get_friendship(source_screen_name=follower.screen_name,target_screen_name=account)
         if (friendship[0].following):
-            result += f'-{account}' if not result == '' else account
+            result += f'-{account}' if not result == '' else account           
 
-    return result
-
+    return result            
 
 def execute_block(follower):
+    try:
 
-    not_desired_words = os.getenv('not_desired_words').split(',')
-    exception_words = os.getenv('exception_words').split(',')
+        if already_in_file(screen_name=follower.screen_name, file_name=NOT_BLOCKED_FILE_NAME) or already_in_file(screen_name=follower.screen_name, file_name=BLOCKED_FILE_NAME):
+                return
 
-    follows = get_friendship(follower)
+        not_desired_words = os.getenv('not_desired_words').split(',')
+        exception_words = os.getenv('exception_words').split(',')
 
-    if (not follower.description is None):
-        block = any(word.lower() in follower.description.lower().replace(',','') for word in not_desired_words) or follows != ''
-        not_block = any(word.lower() in follower.description.lower().replace(',','') for word in exception_words)
+        follows = get_friendship(follower)
 
-    follows = f',{follows}' if follows != '' else ''
+        if (not follower.description is None):
+            block = any(word.lower() in follower.description.lower().replace(',','') for word in not_desired_words) or follows != ''
+            not_block = any(word.lower() in follower.description.lower().replace(',','') for word in exception_words)
 
-    follower_str = f'{follower.id_str},{follower.name},@{follower.screen_name},{follower.created_at.strftime("%d-%m-%Y")},{follower.followers_count}{follows}'
+        follows = f',{follows}' if follows != '' else ''
 
-    if (block and not not_block):
-        __api.create_block(user_id=follower.id_str)
-        with open('blocked.csv', 'a', encoding='utf-8') as f:
-            print(f'BLOCKED --> {follower_str}')
-            f.write(follower_str + '\n')
-    else:
-        with open('not_blocked.csv', 'a', encoding='utf-8') as f:
-            print(f'OK {follower_str}')
-            f.write(follower_str + '\n')
+        follower_str = f'{follower.id_str},{follower.name},@{follower.screen_name},{follower.created_at.strftime("%d-%m-%Y")},{follower.followers_count}{follows}'
 
+        if (block and not not_block):
+            #__api.create_block(user_id=follower.id_str)
+            write_file(file_name=BLOCKED_FILE_NAME, message=f'{follower_str}')
+        else:
+            write_file(file_name=NOT_BLOCKED_FILE_NAME, message=f'{follower_str}')
+
+    except tweepy.TooManyRequests as e:
+        print(str(e))
+        timer(60 * 15)                 
+    except tweepy.RateLimitError as e:
+        print(str(e))
+        timer(60 * 15)
+
+def write_file(file_name, message):
+    with open(file_name, 'a', encoding='utf-8') as f:
+        print(f'{file_name}: {message}')
+        f.write(message + '\n')
 
 def limit_handled(cursor):
     while True:
-        try:
+        try:            
             yield cursor.next()
+        except tweepy.RateLimitError:
+            timer(60 * 15)
         except Exception as e:
             print(str(e))
-            timer(15 * 60)            
-
+            timer(60 * 15)
+                
 
 def timer(seconds):
     while seconds:
@@ -81,7 +111,7 @@ def timer(seconds):
         seconds -= 1
 
 
-if __name__ == '__main__':
+if __name__ == '__main__':    
     load_dotenv(find_dotenv())
     __api = get_api()
     block_followers()
