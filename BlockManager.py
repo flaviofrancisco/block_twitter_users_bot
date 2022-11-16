@@ -126,5 +126,5 @@ class BlockManager:
 
         except tweepy.TooManyRequests as e:
             self.__wait(str(e))                 
-        except tweepy.RateLimitError as e:
+        except Exception as e:
             self.__wait(str(e))                                                  
