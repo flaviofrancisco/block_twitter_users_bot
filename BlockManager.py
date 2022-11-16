@@ -1,6 +1,7 @@
 import os
 import csv
 import tweepy
+from BlockUserOptions import BlockUserOptions
 from DefaultValues import DefaultValues
 from Settings import Settings
 import os.path
@@ -9,8 +10,7 @@ import time
 class BlockManager:
 
     def __init__(self):
-        self.__check_friendship = False
-        self.__dryrun = True
+        self.__block_user_options = BlockUserOptions()        
         self.__settings = Settings()
         
         auth = tweepy.OAuthHandler(consumer_key=self.__settings.consumer_key, consumer_secret=self.__settings.consumer_secret)
@@ -61,7 +61,7 @@ class BlockManager:
         print(message)
         self.__timer(60 * 15)                          
 
-    def block_followers(self, check_firendship = False, dryrun = True):
+    def block_followers(self, options: BlockUserOptions):
         """ Scan all your followers and blocks each follower based on the values filled in your environment variables:
         e.g:
             - not_desired_words: comma separated values.
@@ -69,11 +69,9 @@ class BlockManager:
             - restricted_accounts: comma separeted Twitter account names.
 
         Args:
-        check_firendship: If true checks whether each follower follows the accounts listed in your environment variable: restricted_accounts and block the follower if applicable.
-        dryrun: If true, neither block any follower nor populates any csv file. It is your test mode.
+        options: BlockUserOptions type where you can set you preferences, please see more in the file: BlockUserOptions.py.
         """  
-        self.__check_friendship = check_firendship
-        self.__dryrun = dryrun
+        self.__block_user_options = options
 
         for follower in self.__limit_handled(tweepy.Cursor(self.__api.get_followers, screen_name=self.__settings.my_screen_name, count=200).items()):        
             self.execute_block(follower) 
@@ -89,7 +87,7 @@ class BlockManager:
 
     def __write_file(self, file_name, message):
         print(f'{file_name}: {message}')
-        if not self.__dryrun:
+        if not self.__block_user_options.dryrun:
             with open(file_name, 'a', encoding='utf-8') as f:            
                 f.write(message + '\n')
 
@@ -103,7 +101,7 @@ class BlockManager:
                 print(f'Already in file: {follower.screen_name}')
                 return
 
-            follows = self.get_friendship(follower) if self.__check_friendship else ''
+            follows = self.get_friendship(follower) if self.__block_user_options.check_firendship else ''
 
             if (not follower.description is None):
                 block = self.__has_words(follower.description, self.__settings.not_desired_words) or follows != ''
@@ -118,7 +116,7 @@ class BlockManager:
             follower_str = f'{follower.id_str},{name},@{follower.screen_name},{follower.created_at.strftime("%d-%m-%Y")},{follower.followers_count}{follows}'
 
             if (block and not not_block):
-                if not self.__dryrun:
+                if not self.__block_user_options.dryrun:
                     self.__api.create_block(user_id=follower.id_str)
                 self.__write_file(file_name=DefaultValues.BLOCKED_FILE_NAME, message=f'{follower_str}')
             else:

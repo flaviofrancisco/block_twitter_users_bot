@@ -19,7 +19,22 @@ Due to rate limits the program stops for 15 minutes each time that either an Rat
 In order to test please update the code in the file: block_users.py
 
 ```python
-block_manager.block_followers(check_firendship=False, dryrun=True)
+from BlockManager import BlockManager
+from BlockUserOptions import BlockUserOptions
+
+def run():
+    block_manager = BlockManager()
+    
+    options = BlockUserOptions()
+    # If true runs on test mode.
+    options.dryrun = True
+    # Don't check the accounts that a follower is following.
+    options.check_firendship = False
+
+    block_manager.block_followers(options=options)
+
+if __name__ == '__main__':
+    run()
 ```
 
 If you either don't wan't to check your followers friendship set the check_firendship parameter to False. If that parameter is True it will increase your Twitter rate consumption and it will slow down the applicaiton.
