@@ -70,8 +70,6 @@ class BlockManager:
                 yield cursor.next()
             except tweepy.TooManyRequests as e:            
                 self.__wait(str(e))
-            except tweepy.RateLimitError as e:
-                self.__wait(str(e))
             except Exception as e:
                 self.__wait(str(e)) 
 
