@@ -2,8 +2,6 @@
 The goal of this script is to block Twitter users based on words found in the account's description and based on account that your followers follow.
 Due to rate limits the program stops for 15 minutes each time that either an Rate limit exception or Too Many Request exception is thrown.
 
-If you want to not check your followers friendship just comment the line: **follows = self.get_friendship(follower)** and check only the follower description. This will help on less access to Twitter API.
-
 **IT IS YOUR RESPONSABILITY TO RUN THIS SCRIPT AGAINST YOUR ACCOUNT. THIS CODE WAS NOT ACCURATELY TESTED**
 
 **I cannot guarantee that it will work as you expect.**
@@ -17,8 +15,14 @@ If you want to not check your followers friendship just comment the line: **foll
 [Create The Ultimate Twitter Bot With Python In 30 Minutes](https://www.youtube.com/watch?v=ewq-91-e2fw)
 
 # Test before deploy ...
-A recomendation is to play with the words in the settings: not_desired_words and exception_words **comment the line: self.__api.create_block(user_id=follower.id_str) in the file BlockManager.py to test**.
-With that you generate two files: one with the blocked accounts and another one with no blocked accounts.
+
+In order to test please update the code in the file: block_users.py
+
+```python
+block_manager.block_followers(check_firendship=False, dryrun=True)
+```
+
+If you either don't wan't to check your followers friendship set the check_firendship parameter to False. If that parameter is True it will increase your Twitter rate consumption and it will slow down the applicaiton.
 
 # Setting up your environment
 After cloning this repository you should create a virtual environment and activate it.
@@ -44,20 +48,9 @@ or
 $ pip3 install -r requirements.txt
 ```
 
-## .env file
-You should also create a .env file with the following keyss/ values based on your needs. Replace the values between squared brackets accordingly.
-
-```
-consumer_key=[Get it from the Twitter Developer Console]
-consumer_secret=[Get it from the Twitter Developer Console]
-access_token_key=[Get it from the Twitter Developer Console]
-access_token_secret=[Get it from the Twitter Developer Console]
-screen_name=[Your account]
-not_desired_words=[Comma separated word list]
-exception_words=[Comma separated word list]
-restricted_accounts=[Comma separated account names of people you don't want your followers following.]
-```
 # Run the Script Replace the values between squared brackets accordingly.
+
+Rename the file: .env.template to .env and fill up the values of the enviroment variables based on your needs.
 
 ```
 consumer_key=[Get it from the Twitter Developer Console]
