@@ -9,6 +9,14 @@ import time
 
 class BlockManager:
 
+    @property
+    def options(self):
+        return self.__block_user_options
+
+    @options.setter
+    def options(self, value):
+        self.__block_user_options = value
+
     def __init__(self):
         self.__block_user_options = BlockUserOptions()        
         self.__settings = Settings()
@@ -105,10 +113,7 @@ class BlockManager:
         words_found = self.__intersection(self.__settings.not_desired_words, follower.name.split())            
 
         if (self.__block_user_options.min_restricted_words_qty <= len(words_found)):
-            return True                       
-
-        if (self.__block_user_options.check_firendship):
-            pass            
+            return True                                
 
         return False
 
@@ -118,7 +123,7 @@ class BlockManager:
 
     def __block_when_friends(self, friends) -> bool:
         
-        accounts = self.__intersection(self.__settings.not_desired_words, friends.split('|'))  
+        accounts = self.__intersection(self.__settings.restricted_accounts, friends.split('|'))  
 
         if (self.__block_user_options.min_restricted_accounts_qty <= len(accounts)):
             return True     
