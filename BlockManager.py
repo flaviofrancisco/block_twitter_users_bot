@@ -38,12 +38,13 @@ class BlockManager:
         for account in self.__settings.restricted_accounts:        
             friendship = self.__api.get_friendship(source_screen_name=follower.screen_name,target_screen_name=account)
             # Ajust it to avoid TooManyRequests.            
-            self.__timer(1, show_message=False)              
-            print(dot, end="\r")                      
-            print(dot)
+            self.__timer(1, show_message=False)                          
             if (friendship[0].following):
-                result += f'-{account}' if not result == '' else account            
-            dot += '.'            
+                print(f'{account} ' + u'\u2713')
+                result += f'|{account}' if not result == '' else account            
+            else:
+                print(f'{account} ' + u'\u2715')                
+            
 
 
         return result
@@ -91,8 +92,39 @@ class BlockManager:
             with open(file_name, 'a', encoding='utf-8') as f:            
                 f.write(message + '\n')
 
-    def __has_words(self, description, word_list):
-        return any(word.lower() in description.lower().replace(',','') for word in word_list)             
+    def __has_words(self, follower, word_list):
+        return any(word.lower() in follower.description.lower().replace(',','') for word in word_list) or any(word.lower() in follower.name.lower().replace(',','') for word in word_list) 
+
+    def __block(self, follower) -> bool:
+
+        words_found = self.__intersection(self.__settings.not_desired_words, follower.description.split())
+
+        if (self.__block_user_options.min_restricted_words_qty <= len(words_found)):
+            return True
+
+        words_found = self.__intersection(self.__settings.not_desired_words, follower.name.split())            
+
+        if (self.__block_user_options.min_restricted_words_qty <= len(words_found)):
+            return True                       
+
+        if (self.__block_user_options.check_firendship):
+            pass            
+
+        return False
+
+    def __intersection(self, list1, list2):
+        result = [value for value in list1 if value in list2]                         
+        return result
+
+    def __block_when_friends(self, friends) -> bool:
+        
+        accounts = self.__intersection(self.__settings.not_desired_words, friends.split('|'))  
+
+        if (self.__block_user_options.min_restricted_accounts_qty <= len(accounts)):
+            return True     
+
+        return False
+        
 
     def execute_block(self, follower):
         try:
@@ -101,19 +133,19 @@ class BlockManager:
                 print(f'Already in file: {follower.screen_name}')
                 return
 
-            follows = self.get_friendship(follower) if self.__block_user_options.check_firendship else ''
+            friends = self.get_friendship(follower) if self.__block_user_options.check_firendship else ''
 
             if (not follower.description is None):
-                block = self.__has_words(follower.description, self.__settings.not_desired_words) or follows != ''
-                not_block = self.__has_words(follower.description, self.__settings.exception_words)
+                block = self.__block(follower=follower) or self.__block_when_friends(friends=friends)
+                not_block = self.__has_words(follower, self.__settings.exception_words)
             else:
-                block = follows != ''
+                block = friends != ''
 
-            follows = f',{follows}' if follows != '' else ''
+            friends = f',{friends}' if friends != '' else ''
 
             name = follower.name.replace(',', '-')
 
-            follower_str = f'{follower.id_str},{name},@{follower.screen_name},{follower.created_at.strftime("%d-%m-%Y")},{follower.followers_count}{follows}'
+            follower_str = f'{follower.id_str},{name},@{follower.screen_name},{follower.created_at.strftime("%d-%m-%Y")},{follower.followers_count}{friends}'
 
             if (block and not not_block):
                 if not self.__block_user_options.dryrun:
