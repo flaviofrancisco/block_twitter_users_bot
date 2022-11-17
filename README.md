@@ -30,6 +30,10 @@ def run():
     options.dryrun = True
     # Don't check the accounts that a follower is following.
     options.check_firendship = False
+    # Block if follower is following at least 2 accounts from the env. variable: restricted_accounts
+    options.min_restricted_accounts_qty = 2
+    # Block if follower has at least 2 words listed in the env. variable: not_desired_words either in his/her description or name.
+    options.min_restricted_words_qty = 2
 
     block_manager.block_followers(options=options)
 

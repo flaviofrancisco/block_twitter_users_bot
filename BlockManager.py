@@ -87,7 +87,7 @@ class BlockManager:
                 self.__wait(str(e)) 
 
     def __write_file(self, file_name, message):
-        print(f'{file_name}: {message}')
+        print(f'{file_name}: {message} \n\n')
         if not self.__block_user_options.dryrun:
             with open(file_name, 'a', encoding='utf-8') as f:            
                 f.write(message + '\n')
