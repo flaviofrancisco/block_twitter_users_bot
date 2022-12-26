@@ -40,10 +40,12 @@ class BlockManager:
 
         return False
 
-    def get_friendship(self, follower):
-        
-        result = ''   
-        dot = '.'
+    def get_friendship(self, follower):        
+        result = '' 
+
+        if (self.__settings.restricted_accounts is None or len(self.__settings.restricted_accounts) == 0):            
+            return
+
         print(f'Checking friendship of {follower.screen_name} ...')        
         for account in self.__settings.restricted_accounts:        
             friendship = self.__api.get_friendship(source_screen_name=follower.screen_name,target_screen_name=account)
@@ -103,9 +105,14 @@ class BlockManager:
                 f.write(message + '\n')
 
     def __has_words(self, follower, word_list):
+        if (word_list is None):
+            return False
         return any(word.lower() in follower.description.lower().replace(',','') for word in word_list) or any(word.lower() in follower.name.lower().replace(',','') for word in word_list) 
 
     def __block(self, follower) -> bool:
+
+        if (follower.screen_name[-7:-1].isdigit()):
+            return True
 
         words_found = self.__intersection(self.__settings.not_desired_words, follower.description.split())
 
@@ -120,10 +127,17 @@ class BlockManager:
         return False
 
     def __intersection(self, list1, list2):
+
+        if (list1 is None or list2 is None):
+            return []
+
         result = [value for value in list1 if value in list2]                         
         return result
 
     def __block_when_friends(self, friends) -> bool:
+
+        if (friends is None):
+            return False
         
         accounts = self.__intersection(self.__settings.restricted_accounts, friends.split('|'))  
 
