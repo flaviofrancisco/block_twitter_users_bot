@@ -118,7 +118,7 @@ class BlockManager:
         if (follower.protected == True):
             return False            
 
-        if (len([int(s) for s in follower.screen_name if s.isdigit()]) >= 5):
+        if (self.__block_user_options.min_qty_digits_on_screen_name != 0 and len([int(s) for s in follower.screen_name if s.isdigit()]) >= self.__block_user_options.min_qty_digits_on_screen_name):
             return True
 
         words_found = self.__intersection(self.__settings.not_desired_words, follower.description.split())

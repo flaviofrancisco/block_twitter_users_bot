@@ -41,6 +41,8 @@ if __name__ == '__main__':
     run()
 ```
 
+**NOTE: Check the file: [BlockUserOptions.py](https://github.com/flaviofrancisco/block_twitter_users_bot/blob/main/BlockUserOptions.py) for more details about the settings.**
+
 If you either don't wan't to check your followers friendship set the check_firendship parameter to False. If that parameter is True it will increase your Twitter rate consumption and it will slow down the applicaiton.
 
 # Setting up your environment

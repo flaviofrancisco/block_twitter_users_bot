@@ -17,5 +17,8 @@ class BlockUserOptions:
         '''If your follower has no Tweets than she or he will be blocked.'''
 
         self.min_favourites_count = 0
-        '''If the follower has no reaction than will be blocked.'''
+        '''You can define the min quantity of like an account gave as parameter to block it.'''
+
+        self.min_qty_digits_on_screen_name = 5
+        '''Bot accounts name usually ends with digits. You can define how many digits found in an account name as a parameter to block an user.'''
 
