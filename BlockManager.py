@@ -1,3 +1,4 @@
+import datetime
 import os
 import csv
 import tweepy
@@ -62,7 +63,7 @@ class BlockManager:
         return result
 
     def __timer(self, seconds, show_message=True):
-        while seconds:
+        while seconds > 0:
             mins, secs = divmod(seconds, 60)
             timer = '{:02d}:{:02d}'.format(mins, secs)
             if show_message:
@@ -93,8 +94,6 @@ class BlockManager:
         while True:
             try:            
                 yield cursor.next()
-            except tweepy.TooManyRequests as e:            
-                self.__wait(str(e))
             except Exception as e:
                 self.__wait(str(e)) 
 
@@ -105,23 +104,31 @@ class BlockManager:
                 f.write(message + '\n')
 
     def __has_words(self, follower, word_list):
+
         if (word_list is None):
             return False
+
         return any(word.lower() in follower.description.lower().replace(',','') for word in word_list) or any(word.lower() in follower.name.lower().replace(',','') for word in word_list) 
 
     def __block(self, follower) -> bool:
 
-        if (follower.screen_name[-7:-1].isdigit()):
+        if (follower.favourites_count == self.__block_user_options.min_favourites_count):
+            return True
+
+        if (follower.protected == True):
+            return False            
+
+        if (len([int(s) for s in follower.screen_name if s.isdigit()]) >= 5):
             return True
 
         words_found = self.__intersection(self.__settings.not_desired_words, follower.description.split())
 
-        if (self.__block_user_options.min_restricted_words_qty <= len(words_found)):
+        if (self.__block_user_options.min_restricted_words_qty <= len(words_found) and len(words_found) > 0):
             return True
 
         words_found = self.__intersection(self.__settings.not_desired_words, follower.name.split())            
 
-        if (self.__block_user_options.min_restricted_words_qty <= len(words_found)):
+        if (self.__block_user_options.min_restricted_words_qty <= len(words_found) and len(words_found) > 0):
             return True                                
 
         return False
@@ -149,7 +156,7 @@ class BlockManager:
 
     def execute_block(self, follower):
         try:
-
+            
             if self.__already_in_file(screen_name=follower.screen_name, file_name=DefaultValues.NOT_BLOCKED_FILE_NAME) or self.__already_in_file(screen_name=follower.screen_name, file_name=DefaultValues.BLOCKED_FILE_NAME):
                 print(f'Already in file: {follower.screen_name}')
                 return
@@ -162,13 +169,18 @@ class BlockManager:
             else:
                 block = friends != ''
 
-            friends = f',{friends}' if friends != '' else ''
+            friends = f',{friends}' if friends != '' and friends != None else ''
 
             name = follower.name.replace(',', '-')
 
             follower_str = f'{follower.id_str},{name},@{follower.screen_name},{follower.created_at.strftime("%d-%m-%Y")},{follower.followers_count}{friends}'
 
-            if (block and not not_block):
+            today = datetime.datetime.now()
+            if ((today - follower.created_at.replace(tzinfo=None)).days <= 90):
+                block = True
+                not_block = False            
+
+            if (follower.followers_count == 0 or (block and not not_block)):
                 if not self.__block_user_options.dryrun:
                     self.__api.create_block(user_id=follower.id_str)
                 self.__write_file(file_name=DefaultValues.BLOCKED_FILE_NAME, message=f'{follower_str}')
